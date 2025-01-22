@@ -1,0 +1,36 @@
+services:
+  app:
+    container_name: application
+    image: node:23-alpine
+    working_dir: /application
+    ports:
+      - "3000:3000"
+    volumes:
+      - .:/application
+      - /application/node_modules
+    environment:
+      - NODE_ENV=development
+      - DB_TYPE=mongodb
+      - DB_HOST=mongo
+      - DB_PORT=27017
+      - DB_NAME=ramadhan
+      - APP_JWT_SECRET=533951dbe4d739995117219da412e6baf872b9acbef4a7d91577d5d6484cf7b9b70500d2d1a2bb27b28206680498c66f3755a5b6098b0ee0a29ccd4a3453cc0a
+    command: >
+      sh -c "npm i pnpm --global && pnpm install && pnpm run build && pnpm run start:dev"
+    depends_on:
+      - mongo
+
+  mongo:
+    container_name: mongo
+    image: mongo:6.0
+    ports:
+      - "27017:27017"
+    environment:
+      - MONGODB_INITDB_ROOT_USERNAME=root
+      - MONGODB_INITDB_ROOT_PASSWORD=root
+      - MONGODB_INITDB_DATABASE=ramadhan
+    volumes:
+      - mongo-data:/data/db
+
+volumes:
+  mongo-data:

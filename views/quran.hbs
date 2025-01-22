@@ -1,0 +1,89 @@
+{{#extend "layout" title="ختم القرآن" page="quran"}}
+  {{#content "main"}}
+    <div class="container mx-auto px-4 py-6">
+      <h1 class="text-2xl font-bold">ختم القرآن الكريم ({{count}} ٱية اليوم)</h1>
+      <h2 class="text-lg text-gray-500 mb-4">متبقي {{remaining}} يوم</h2>
+      {{#each surahs}}
+        <table class="table-auto w-full">
+          <thead>
+          <th colspan="3"><h3 class="text-2xl font-semibold font-amiri-colored">{{surahNumber}} - {{surah}}</h3></th>
+          </thead>
+          <tbody>
+          {{#each ayahs}}
+            <tr class="text-center" data-ayah="{{number}}">
+              <td class="text-start py-2 w-12">
+                {{> quran_icon}}
+              </td>
+              <td class="text-start py-2 text-lg font-amiri-colored">{{text}}</td>
+              <td class="text-start p-2 w-48">
+                <audio controls controlsList="nodownload" class="audio-player w-64" onended="handleAudioEnd({{number}})">
+                  <source src="{{audio}}" type="audio/mpeg" />
+                  متصفحك لا يدعم تشغيل الصوت.
+                </audio>
+              </td>
+            </tr>
+          {{/each}}
+          </tbody>
+        </table>
+      {{/each}}
+    </div>
+  {{/content}}
+  {{#content "script"}}
+    <script>
+      function disableAllAudioPlayers() {
+        const audioPlayers = document.querySelectorAll("tr[data-ayah]");
+        audioPlayers.forEach(audio => {
+          audio.setAttribute("style", "pointer-events:none;opacity:0.5;filter:grayscale(1);");
+        });
+      }
+
+      // Enable a specific audio player
+      function enableAudioPlayer(selector) {
+        const audio = document.querySelector(selector);
+        if (audio) {
+          audio.removeAttribute("style");
+        }
+      }
+
+      // Handle when an audio starts playing
+      function handleAudioPlay(ayahNumber) {
+        disableAllAudioPlayers();
+        enableAudioPlayer(`tr[data-ayah="${ayahNumber}"]`);
+      }
+
+      // Handle when an audio starts playing
+      function autoPlay(ayahNumber) {
+        const audio = document.querySelector(`tr[data-ayah="${ayahNumber}"] audio`);
+        if (audio) {
+          audio.play();
+        }
+      }
+
+      function handleAudioEnd(ayahNumber) {
+        fetch("/api/mark-ayah", {
+          method: "PATCH",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({ ayahNumber })
+        })
+          .then((response) => {
+            if (!response.ok) {
+              throw new Error("Network response was not ok");
+            }
+            return response.json();
+          })
+          .then((data) => {
+            console.log("Audio end logged:", data);
+            handleAudioPlay(ayahNumber + 1);
+            autoPlay(ayahNumber + 1);
+          })
+          .catch((error) => {
+            console.error("Error logging audio end:", error);
+          });
+      }
+
+      handleAudioPlay({{start}});
+    </script>
+  {{/content}}
+{{/extend}}

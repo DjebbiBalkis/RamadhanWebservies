@@ -1,0 +1,12 @@
+@font-face {
+    font-family: 'Amiri Quran Colored';
+    src: url('/assets/fonts/AmiriQuranColored.eot');
+    src: url('/assets/fonts/AmiriQuranColored.eot?#iefix') format('embedded-opentype'),
+    url('/assets/fonts/AmiriQuranColored.woff2') format('woff2'),
+    url('/assets/fonts/AmiriQuranColored.woff') format('woff'),
+    url('/assets/fonts/AmiriQuranColored.ttf')  format('truetype'),
+    url('/assets/fonts/AmiriQuranColored.svg#Amiri Quran Colored') format('svg');
+}
+@tailwind base;
+@tailwind components;
+@tailwind utilities;

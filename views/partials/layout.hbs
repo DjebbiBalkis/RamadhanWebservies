@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="ar-TN" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>تطبيق رمضان: {{title}}</title>
+  <link href="/assets/css/tailwind.css" rel="stylesheet"/>
+  <link href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css" rel="stylesheet"/>
+  {{#block "imports"}}{{/block}}
+  </head>
+<body class="bg-gray-100 text-gray-900 rtl h-screen overflow-hidden">
+<!-- Full Page Container -->
+<div class="flex flex-col h-full">
+{{#block "header"}}
+  {{> header}}
+{{/block}}
+
+<div class="container flex-1 w-full overflow-y-auto px-4 py-6">
+  {{#block "main"}}
+  {{/block}}
+</div>
+
+{{#block "footer"}}
+  {{> footer}}
+{{/block}}
+</div>
+{{#block "script"}}{{/block}}
+</body>
+</html>

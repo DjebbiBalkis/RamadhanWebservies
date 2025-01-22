@@ -1,0 +1,111 @@
+{{#extend "layout" title="إنشاء حساب جديد"}}
+  {{#content "header"}}{{/content}}
+  {{#content "footer"}}{{/content}}
+  {{#content "script"}}
+    <script>
+      function setHiddenData(latitude, longitude, timezone) {
+        console.log("My public IP address is: ", { latitude, longitude, timezone });
+        const latInput = document.getElementById('latitude');
+        latInput.value = latitude;
+        const lonInput = document.getElementById('longitude');
+        lonInput.value = longitude;
+        const tzInput = document.getElementById('timezone');
+        tzInput.value = timezone;
+      }
+    </script>
+    <script>
+      // Define the callback function
+      function getIP(data) {
+        // Handle the response data here
+        console.log('IP Info:', data);
+
+        const { loc, timezone } = data;
+        const [latitude, longitude] = loc.split(",");
+
+        setHiddenData(latitude, longitude, timezone);
+      }
+
+      // Dynamically add the JSONP script to the document
+      const script = document.createElement('script');
+      script.src = 'http://ipinfo.io/?format=jsonp&callback=getIP';
+      document.body.appendChild(script);
+    </script>
+
+  {{/content}}
+
+    {{#content "main"}}
+      <div class="min-h-screen flex items-center justify-center bg-gray-100">
+        <div class="bg-white p-8 rounded-lg shadow-md w-full max-w-sm">
+          <h2 class="text-2xl font-bold text-center mb-6">إنشاء حساب جديد</h2>
+          {{#if errors}}
+            <div class="bg-red-100 text-red-700 p-4 rounded mb-4">
+              <ul>
+                {{#each errors}}
+                  <li>{{this}}</li>
+                {{/each}}
+              </ul>
+            </div>
+          {{/if}}
+          <form action="/register" method="POST">
+            <input type="hidden" id="latitude" name="latitude" required />
+            <input type="hidden" id="longitude" name="longitude" required />
+            <input type="hidden" id="timezone" name="timezone" required />
+            <div class="mb-4">
+              <label for="name" class="block text-sm font-medium text-gray-700">الاسم الكامل</label>
+              <input
+                type="text"
+                id="name"
+                name="name"
+                value="{{name}}"
+                class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:ring-emerald-500 focus:border-emerald-500"
+                required
+              />
+            </div>
+            <div class="mb-4">
+              <label for="username" class="block text-sm font-medium text-gray-700">اسم المستخدم</label>
+              <input
+                type="text"
+                id="username"
+                name="username"
+                value="{{username}}"
+                class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:ring-emerald-500 focus:border-emerald-500"
+                required
+              />
+            </div>
+            <div class="mb-4">
+              <label for="password" class="block text-sm font-medium text-gray-700">كلمة المرور</label>
+              <input
+                type="password"
+                id="password"
+                name="password"
+                value="{{password}}"
+                class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:ring-emerald-500 focus:border-emerald-500"
+                required
+              />
+            </div>
+            <div class="mb-6">
+              <label for="confirmPassword" class="block text-sm font-medium text-gray-700">تأكيد كلمة المرور</label>
+              <input
+                type="password"
+                id="confirmPassword"
+                name="confirmPassword"
+                value="{{confirmPassword}}"
+                class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:ring-emerald-500 focus:border-emerald-500"
+                required
+              />
+            </div>
+            <button
+              type="submit"
+              class="w-full bg-emerald-500 text-white py-2 px-4 rounded-lg font-semibold hover:bg-emerald-600 transition-colors"
+            >
+              تسجيل
+            </button>
+          </form>
+          <p class="text-sm text-gray-500 mt-4 text-center">
+            هل لديك حساب؟
+            <a href="/login" class="text-emerald-500 hover:underline">سجل الدخول</a>
+          </p>
+        </div>
+      </div>
+  {{/content}}
+{{/extend}}

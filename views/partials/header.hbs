@@ -1,0 +1,21 @@
+<header class="bg-emerald-500 text-white shadow">
+  <div class="container mx-auto px-4 py-3 flex items-center justify-between">
+    <img src="/assets/visuals/logo.svg" alt="تطبيق رمضان" class="h-12"/>
+    <nav class="flex items-center gap-4">
+      <a href="/profile" class="hover:text-emerald-200{{#if (eq page 'profile')}} bg-emerald-400{{/if}} rounded px-4 py-2 transition flex items-center gap-2">
+        <i class="ti ti-user-square-rounded mr-2"></i><span>الملف الشخصي</span>
+      </a>
+      <a href="/ramadan-schedule" class="hover:text-emerald-200{{#if (eq page 'ramadan')}} bg-emerald-400{{/if}} rounded px-4 py-2 transition flex items-center gap-2">
+        <i class="ti ti-calendar-event mr-2"></i>
+        <span>جدول رمضان</span>
+      </a>
+      <a href="/quran" class="hover:text-emerald-200{{#if (eq page 'quran')}} bg-emerald-400{{/if}} rounded px-4 py-2 transition flex items-center gap-2">
+        <i class="ti ti-book mr-2"></i>
+        <span>ختم القرآن</span>
+      </a>
+      <a href="/logout" class="hover:text-emerald-200 rounded px-4 py-2 transition flex items-center gap-2">
+        <i class="ti ti-logout mr-2"></i><span>خروج</span>
+      </a>
+    </nav>
+  </div>
+</header>

@@ -1,0 +1,104 @@
+<div class="container mx-auto px-4 py-8">
+  <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
+    <div class="bg-white shadow-md col-span-2 rounded-lg p-6">
+      <h2 class="text-xl font-semibold mb-4">صلوات اليوم</h2>
+      <div>
+        <table class="w-full text-center border-collapse">
+          <tbody>
+            <tr>
+              <td class="px-2 w-1/2"><p class="text-gray-700">{{prayers.gregorian}}</p></td>
+              <td class="px-2 w-1/2"><p class="text-gray-700">{{prayers.hijri}}</p></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div>
+        <table class="w-full text-center border-collapse">
+          <tbody>
+          <tr>
+            <th class="{{#if (eq prayers.current prayers.fajr)}}text-gray-900 {{else}}text-gray-500 {{/if}}px-2 text-lg">الفجر</th>
+            <th class="{{#if (eq prayers.current prayers.dhuhr)}}text-gray-900 {{else}}text-gray-500 {{/if}}text-gray-500 px-2 text-lg">الظهر</th>
+            <th class="{{#if (eq prayers.current prayers.asr)}}text-gray-900 {{else}}text-gray-500 {{/if}}text-gray-500 px-2 text-lg">العصر</th>
+            <th class="{{#if (eq prayers.current prayers.maghrib)}}text-gray-900 {{else}}text-gray-500 {{/if}}text-gray-500 px-2 text-lg">المغرب</th>
+            <th class="{{#if (eq prayers.current prayers.isha)}}text-gray-900 {{else}}text-gray-500 {{/if}}text-gray-500 px-2 text-lg">العشاء</th>
+          </tr>
+          <tr>
+            <td class="{{#if (eq prayers.current prayers.fajr)}}text-gray-900 font-semibold {{else}}text-gray-500 {{/if}}px-2 w-1/5">{{prayers.fajr}}</td>
+            <td class="{{#if (eq prayers.current prayers.dhuhr)}}text-gray-900 font-semibold {{else}}text-gray-500 {{/if}}px-2 w-1/5" >{{prayers.dhuhr}}</td>
+            <td class="{{#if (eq prayers.current prayers.asr)}}text-gray-900 font-semibold {{else}}text-gray-500 {{/if}}px-2 w-1/5">{{prayers.asr}}</td>
+            <td class="{{#if (eq prayers.current prayers.maghrib)}}text-gray-900 font-semibold {{else}}text-gray-500 {{/if}}px-2 w-1/5">{{prayers.maghrib}}</td>
+            <td class="{{#if (eq prayers.current prayers.isha)}}text-gray-900 font-semibold {{else}}text-gray-500 {{/if}}px-2 w-1/5">{{prayers.isha}}</td>
+          </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="bg-white shadow-md rounded-lg p-6">
+      <h2 class="text-xl font-semibold mb-4">الإمساك والإفطار</h2>
+      <table class="w-full text-center border-collapse">
+        <tr>
+          <td class="px-2"><i class="ti ti-sun mr-2 h-8 w-8 text-amber-500"></i></td>
+          <td class="px-2"><i class="ti ti-moon mr-2 h-8 w-8 text-gray-500"></i></td>
+        </tr>
+        <tr>
+          <th class="px-2"><p class="text-lg">الإمساك</p></th>
+          <th class="px-2"><p class="text-lg">الإفطار</p></th>
+        </tr>
+        <tr>
+          <td class="px-2"><p class="text-gray-600">{{prayers.imsak}}</p></td>
+          <td class="px-2"><p class="text-gray-600">{{prayers.maghrib}}</p></td>
+        </tr>
+      </table>
+    </div>
+
+    <div class="bg-white shadow-md rounded-lg p-6">
+      <h2 class="text-xl font-semibold mb-4">الوقت حتى {{#if (eq next_prayer.type 'imsak')}}الإمساك{{/if}}{{#if (eq next_prayer.type 'maghrib')}}الإفطار{{/if}}</h2>
+      <p class="text-gray-700">
+        {{#if (eq next_prayer.type 'imsak')}}الإمساك{{/if}}{{#if (eq next_prayer.type 'maghrib')}}الإفطار{{/if}} على الساعة {{next_prayer.string_time}} أي
+        <span id="timer"></span>
+      </p>
+    </div>
+  </div>
+</div>
+<script>
+  function startCountdown() {
+    const timerElement = document.getElementById('timer');
+
+    // Create a relative time formatter
+    const formatter = new Intl.RelativeTimeFormat('ar-TN', { numeric: 'always' });
+
+    function updateTimer() {
+      const now = new Date();
+      const target = new Date('{{next_prayer.timestamp}}');
+      const remaining = target - now;
+
+      if (remaining <= 0) {
+        timerElement.textContent = 'الآن';
+        clearInterval(timerInterval);
+        return;
+      }
+
+      // Calculate remaining time in seconds, minutes, or hours
+      const seconds = Math.floor(remaining / 1000);
+      const minutes = Math.floor(remaining / (1000 * 60));
+      const hours = Math.floor(remaining / (1000 * 60 * 60));
+
+      // Determine the most appropriate unit
+      let relativeTime;
+      if (hours > 0) {
+        relativeTime = formatter.format(hours, 'hour');
+      } else if (minutes > 0) {
+        relativeTime = formatter.format(minutes, 'minute');
+      } else {
+        relativeTime = formatter.format(seconds, 'second');
+      }
+
+      timerElement.textContent = relativeTime;
+    }
+
+    const timerInterval = setInterval(updateTimer, 1000);
+    updateTimer(); // Run immediately
+  }
+  startCountdown();
+</script>

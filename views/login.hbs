@@ -1,0 +1,54 @@
+{{#extend "layout" title="تسجيل الدخول"}}
+  {{#content "header"}}{{/content}}
+  {{#content "footer"}}{{/content}}
+
+    {{#content "main"}}
+    <div class="min-h-screen flex items-center justify-center bg-gray-100">
+      <div class="bg-white p-8 rounded-lg shadow-md w-full max-w-sm">
+        <h2 class="text-2xl font-bold text-center mb-6">تسجيل الدخول</h2>
+        {{#if errors}}
+          <div class="bg-red-100 text-red-700 p-4 rounded mb-4">
+            <ul>
+              {{#each errors}}
+                <li>{{this}}</li>
+              {{/each}}
+            </ul>
+          </div>
+        {{/if}}
+        <form action="/login" method="POST">
+          <div class="mb-4">
+            <label for="username" class="block text-sm font-medium text-gray-700">اسم المستخدم:</label>
+            <input
+              type="text"
+              id="username"
+              name="username"
+              value="{{username}}"
+              class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:ring-emerald-500 focus:border-emerald-500"
+              required
+            />
+          </div>
+          <div class="mb-4">
+            <label for="password" class="block text-sm font-medium text-gray-700">كلمة المرور:</label>
+            <input
+              type="password"
+              id="password"
+              name="password"
+              class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:ring-emerald-500 focus:border-emerald-500"
+              required
+            />
+          </div>
+          <button
+            type="submit"
+            class="w-full bg-emerald-500 text-white py-2 px-4 rounded-lg font-semibold hover:bg-emerald-600 transition-colors"
+          >
+            دخول
+          </button>
+        </form>
+        <p class="text-sm text-gray-500 mt-4 text-center">
+          ليس لديك حساب؟
+          <a href="/register" class="text-emerald-500 hover:underline">أنشئ حساباً</a>
+        </p>
+      </div>
+    </div>
+  {{/content}}
+{{/extend}}
