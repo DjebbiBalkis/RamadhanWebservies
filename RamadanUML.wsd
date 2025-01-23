@@ -1,0 +1,116 @@
+@startuml
+
+' ====== Controllers ======
+class AppController {
+    + GET /login
+    + POST /login
+    + GET /register
+    + POST /register
+    + GET /profile
+    + POST /profile
+    + GET /logout
+}
+class QuranController {
+    + GET /quran
+    + PATCH /api/mark-ayah
+}
+class RamadanController {
+    + GET /ramadan-schedule
+}
+
+' ====== Authentication Services ======
+class AuthService {
+    + login(username, password)
+    + register(name, username, password, location)
+    + update(userId, profileData)
+    + load(userId)
+}
+class User {
+    + ObjectId _id
+    + string name
+    + string username
+    + string password
+    + object location
+}
+
+' ====== Quran Services ======
+class QuranService {
+    + seal(ayah, started_at, ends_at)
+    + mark(userId, ayah, started_at)
+    + fetchSurah(surahId)
+    + getTotalAyahs()
+}
+class Surah {
+    + int number
+    + string name
+    + list<Ayah> ayahs
+}
+class Ayah {
+    + int number
+    + string text
+    + string audio
+    + int number_in_surah
+}
+
+' ====== Prayers & Astronomy Services ======
+class PrayersService {
+    + getSchedule(latitude, longitude, timezone)
+    + getNextPrayer(latitude, longitude, timezone)
+}
+class AstronomyService {
+    + toJulian(date)
+    + getSolarDeclination(julianDate)
+    + getEquationOfTime(julianDate)
+    + getTimeForAngle(latitude, declination, angle)
+}
+class DateParserService {
+    + formatPrayerTimes(prayers, timezone)
+    + convertToHijri(gregorianDate)
+}
+
+' ====== Ramadan Services ======
+class RamadanService {
+    + getRamadanDates(timezone)
+    + getFastingSchedule(latitude, longitude, timezone)
+}
+
+' ====== External APIs ======
+class "Quran API (alquran.cloud)" {
+    + fetchQuranData()
+}
+class "OpenStreetMap API" {
+    + reverseGeolocationLookup()
+}
+class "IslamicFinder.org" {
+    + getPrayerTimeReference()
+}
+class "Hijri Date Converter" {
+    + convertHijriToGregorian()
+}
+
+' ====== Relationships ======
+AppController --> AuthService : Uses for authentication
+AuthService --> User : Manages user data
+AuthService --> "OpenStreetMap API" : Calls for geolocation lookup
+
+QuranController --> QuranService : Uses to fetch Quran data
+QuranService --> Surah : Reads from database
+QuranService --> Ayah : Reads from database
+QuranService --> User : Updates reading progress
+QuranService --> "Quran API (alquran.cloud)" : Fetches Quranic data
+
+RamadanController --> RamadanService : Uses for fasting schedules
+RamadanController --> PrayersService : Calls for prayer times
+RamadanController --> DateParserService : Formats prayer schedule
+RamadanController --> AuthService : Fetches user location
+RamadanService --> PrayersService : Fetches Imsak & Maghrib times
+RamadanService --> DateParserService : Formats hijri dates
+RamadanService --> "Hijri Date Converter" : Converts Islamic dates
+
+PrayersService --> AstronomyService : Calls for solar calculations
+PrayersService --> DateParserService : Formats prayer times
+PrayersService --> "IslamicFinder.org" : Uses prayer time reference
+
+AstronomyService --> PrayersService : Provides solar angles
+
+@enduml
