@@ -46,6 +46,7 @@ The application follows a **modular architecture** with the following key compon
 - 🌍 **OpenStreetMap API**: [Nominatim Reverse Geocoding](https://nominatim.org/)
 - 🕌 **IslamicFinder Prayer Times**: [islamicfinder.org](https://www.islamicfinder.org/)
 - 📆 **Hijri Date Converter**: [Hijri-Converter GitHub](https://github.com/xsoh/hijri-converter)
+- 🌍 **IP Geolocation API**: [IpInfo](http://ipinfo.io)
 
 ---
 
