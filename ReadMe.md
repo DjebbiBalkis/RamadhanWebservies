@@ -67,21 +67,23 @@ npm install
 ```sh
 docker-compose up --build
 ```
+
 ### **4️⃣ Optional - Deploy Locally : Set Up Environment Variables**
 step1
 -----------
 Create a `.env` file in the root directory and configure:
+```sh
 MONGO_URI=mongodb://localhost:27017/ramadhan_db or add your MongoDB Atlas link. should ne something like : mongodb+srv://<db_username>:<db_password>@projecttest.dgplz.mongodb.net/?retryWrites=true&w=majority&appName=ProjectTest
 
 JWT_SECRET=your_secret_key
 
 NODE_ENV=development
+```
 
------------
 step2
 -----------
 modify the app.module.ts file to the following:
-
+```sh
 import { Module } from '@nestjs/common';
 import { JwtModule } from '@nestjs/jwt';
 import { TypeOrmModule } from '@nestjs/typeorm';
@@ -118,15 +120,17 @@ import * as controllers from '@controllers';
 })
 export class AppModule {}
 
+```
 
------------
 step3
 -----------
 add the following in main.ts:
+```sh
 import * as dotenv from 'dotenv';
 dotenv.config();
-
----------------------------------------
+```
+step4
+------------
 ### **5️⃣ Start the Application**
 ```sh
 npm run start
